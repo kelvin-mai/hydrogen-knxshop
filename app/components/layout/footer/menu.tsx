@@ -1,32 +1,23 @@
 import { NavLink } from '@remix-run/react';
+
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 import { useRootLoaderData } from '~/root';
 import { FALLBACK_FOOTER_MENU } from '~/constants/fallbacks';
+import { cn } from '~/lib/classname';
 
-export function Footer({
-  menu,
-  shop,
-}: FooterQuery & { shop: HeaderQuery['shop'] }) {
-  return (
-    <footer className='footer'>
-      {menu && shop?.primaryDomain?.url && (
-        <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
-      )}
-    </footer>
-  );
-}
-
-function FooterMenu({
-  menu,
-  primaryDomainUrl,
-}: {
+type FooterMenuProps = {
   menu: FooterQuery['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
-}) {
+};
+
+export const FooterMenu: React.FC<FooterMenuProps> = ({
+  menu,
+  primaryDomainUrl,
+}) => {
   const { publicStoreDomain } = useRootLoaderData();
 
   return (
-    <nav className='footer-menu' role='navigation'>
+    <nav className='flex items-center gap-4 p-4' role='navigation'>
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
@@ -46,7 +37,12 @@ function FooterMenu({
             end
             key={item.id}
             prefetch='intent'
-            style={activeLinkStyle}
+            className={({ isActive, isPending }) =>
+              cn(
+                isActive && 'font-bold',
+                isPending ? 'text-slate-500' : 'text-inherit',
+              )
+            }
             to={url}
           >
             {item.title}
@@ -55,17 +51,4 @@ function FooterMenu({
       })}
     </nav>
   );
-}
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
-  };
-}
+};

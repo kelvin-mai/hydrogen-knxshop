@@ -18,12 +18,12 @@ import {
   type ShouldRevalidateFunction,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
-import favicon from '../public/favicon.svg';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
 import { Layout } from '~/components/layout';
 import tailwindCss from './styles/tailwind.css';
 import { HEADER_QUERY, FOOTER_QUERY } from '~/graphql/storefront';
+import { faviconLinks } from './lib/favicon';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -59,7 +59,7 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    ...faviconLinks,
   ];
 }
 
