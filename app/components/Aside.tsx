@@ -13,17 +13,17 @@ export function Aside({
   heading,
   id = 'aside',
 }: {
-  children?: React.ReactNode;
-  heading: React.ReactNode;
-  id?: string;
+  children?: React.ReactNode
+  heading: React.ReactNode
+  id?: string
 }) {
   return (
-    <div aria-modal className="overlay" id={id} role="dialog">
+    <div aria-modal className='overlay' id={id} role='dialog'>
       <button
-        className="close-outside"
+        className='close-outside'
         onClick={() => {
-          history.go(-1);
-          window.location.hash = '';
+          history.go(-1)
+          window.location.hash = ''
         }}
       />
       <aside>
@@ -34,14 +34,14 @@ export function Aside({
         <main>{children}</main>
       </aside>
     </div>
-  );
+  )
 }
 
 function CloseAside() {
   return (
     /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
-    <a className="close" href="#" onChange={() => history.go(-1)}>
+    <a className='close' href='#' onChange={() => history.go(-1)}>
       &times;
     </a>
-  );
+  )
 }

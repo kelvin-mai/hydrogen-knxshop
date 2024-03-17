@@ -1,28 +1,28 @@
-import {Await, NavLink} from '@remix-run/react';
-import {Suspense} from 'react';
-import type {HeaderQuery} from 'storefrontapi.generated';
-import type {LayoutProps} from './Layout';
-import {useRootLoaderData} from '~/root';
+import { Await, NavLink } from '@remix-run/react'
+import { Suspense } from 'react'
+import type { HeaderQuery } from 'storefrontapi.generated'
+import type { LayoutProps } from './Layout'
+import { useRootLoaderData } from '~/root'
 
-type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
+type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>
 
-type Viewport = 'desktop' | 'mobile';
+type Viewport = 'desktop' | 'mobile'
 
-export function Header({header, isLoggedIn, cart}: HeaderProps) {
-  const {shop, menu} = header;
+export function Header({ header, isLoggedIn, cart }: HeaderProps) {
+  const { shop, menu } = header
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+    <header className='header'>
+      <NavLink prefetch='intent' to='/' style={activeLinkStyle} end>
         <strong>{shop.name}</strong>
       </NavLink>
       <HeaderMenu
         menu={menu}
-        viewport="desktop"
+        viewport='desktop'
         primaryDomainUrl={header.shop.primaryDomain.url}
       />
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
-  );
+  )
 }
 
 export function HeaderMenu({
@@ -30,35 +30,35 @@ export function HeaderMenu({
   primaryDomainUrl,
   viewport,
 }: {
-  menu: HeaderProps['header']['menu'];
-  primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
-  viewport: Viewport;
+  menu: HeaderProps['header']['menu']
+  primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url']
+  viewport: Viewport
 }) {
-  const {publicStoreDomain} = useRootLoaderData();
-  const className = `header-menu-${viewport}`;
+  const { publicStoreDomain } = useRootLoaderData()
+  const className = `header-menu-${viewport}`
 
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
     if (viewport === 'mobile') {
-      event.preventDefault();
-      window.location.href = event.currentTarget.href;
+      event.preventDefault()
+      window.location.href = event.currentTarget.href
     }
   }
 
   return (
-    <nav className={className} role="navigation">
+    <nav className={className} role='navigation'>
       {viewport === 'mobile' && (
         <NavLink
           end
           onClick={closeAside}
-          prefetch="intent"
+          prefetch='intent'
           style={activeLinkStyle}
-          to="/"
+          to='/'
         >
           Home
         </NavLink>
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-        if (!item.url) return null;
+        if (!item.url) return null
 
         // if the url is internal, we strip the domain
         const url =
@@ -66,23 +66,23 @@ export function HeaderMenu({
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
-            : item.url;
+            : item.url
         return (
           <NavLink
-            className="header-menu-item"
+            className='header-menu-item'
             end
             key={item.id}
             onClick={closeAside}
-            prefetch="intent"
+            prefetch='intent'
             style={activeLinkStyle}
             to={url}
           >
             {item.title}
           </NavLink>
-        );
+        )
       })}
     </nav>
-  );
+  )
 }
 
 function HeaderCtas({
@@ -90,11 +90,11 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav className="header-ctas" role="navigation">
+    <nav className='header-ctas' role='navigation'>
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
+      <NavLink prefetch='intent' to='/account' style={activeLinkStyle}>
+        <Suspense fallback='Sign in'>
+          <Await resolve={isLoggedIn} errorElement='Sign in'>
             {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
           </Await>
         </Suspense>
@@ -102,36 +102,36 @@ function HeaderCtas({
       <SearchToggle />
       <CartToggle cart={cart} />
     </nav>
-  );
+  )
 }
 
 function HeaderMenuMobileToggle() {
   return (
-    <a className="header-menu-mobile-toggle" href="#mobile-menu-aside">
+    <a className='header-menu-mobile-toggle' href='#mobile-menu-aside'>
       <h3>☰</h3>
     </a>
-  );
+  )
 }
 
 function SearchToggle() {
-  return <a href="#search-aside">Search</a>;
+  return <a href='#search-aside'>Search</a>
 }
 
-function CartBadge({count}: {count: number}) {
-  return <a href="#cart-aside">Cart {count}</a>;
+function CartBadge({ count }: { count: number }) {
+  return <a href='#cart-aside'>Cart {count}</a>
 }
 
-function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
+function CartToggle({ cart }: Pick<HeaderProps, 'cart'>) {
   return (
     <Suspense fallback={<CartBadge count={0} />}>
       <Await resolve={cart}>
         {(cart) => {
-          if (!cart) return <CartBadge count={0} />;
-          return <CartBadge count={cart.totalQuantity || 0} />;
+          if (!cart) return <CartBadge count={0} />
+          return <CartBadge count={cart.totalQuantity || 0} />
         }}
       </Await>
     </Suspense>
-  );
+  )
 }
 
 const FALLBACK_HEADER_MENU = {
@@ -174,17 +174,17 @@ const FALLBACK_HEADER_MENU = {
       items: [],
     },
   ],
-};
+}
 
 function activeLinkStyle({
   isActive,
   isPending,
 }: {
-  isActive: boolean;
-  isPending: boolean;
+  isActive: boolean
+  isPending: boolean
 }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
     color: isPending ? 'grey' : 'black',
-  };
+  }
 }
