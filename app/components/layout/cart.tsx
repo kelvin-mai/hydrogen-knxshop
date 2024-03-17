@@ -1,33 +1,33 @@
-import { CartForm, Image, Money } from '@shopify/hydrogen'
-import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types'
-import { Link } from '@remix-run/react'
-import type { CartApiQueryFragment } from 'storefrontapi.generated'
-import { useVariantUrl } from '~/lib/variants'
+import { CartForm, Image, Money } from '@shopify/hydrogen';
+import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
+import { Link } from '@remix-run/react';
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
+import { useVariantUrl } from '~/lib/variants';
 
-type CartLine = CartApiQueryFragment['lines']['nodes'][0]
+type CartLine = CartApiQueryFragment['lines']['nodes'][0];
 
 type CartMainProps = {
-  cart: CartApiQueryFragment | null
-  layout: 'page' | 'aside'
-}
+  cart: CartApiQueryFragment | null;
+  layout: 'page' | 'aside';
+};
 
 export function CartMain({ layout, cart }: CartMainProps) {
-  const linesCount = Boolean(cart?.lines?.nodes?.length || 0)
+  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&
-    Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length)
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`
+    Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
+  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
 
   return (
     <div className={className}>
       <CartEmpty hidden={linesCount} layout={layout} />
       <CartDetails cart={cart} layout={layout} />
     </div>
-  )
+  );
 }
 
 function CartDetails({ layout, cart }: CartMainProps) {
-  const cartHasItems = !!cart && cart.totalQuantity > 0
+  const cartHasItems = !!cart && cart.totalQuantity > 0;
 
   return (
     <div className='cart-details'>
@@ -39,17 +39,17 @@ function CartDetails({ layout, cart }: CartMainProps) {
         </CartSummary>
       )}
     </div>
-  )
+  );
 }
 
 function CartLines({
   lines,
   layout,
 }: {
-  layout: CartMainProps['layout']
-  lines: CartApiQueryFragment['lines'] | undefined
+  layout: CartMainProps['layout'];
+  lines: CartApiQueryFragment['lines'] | undefined;
 }) {
-  if (!lines) return null
+  if (!lines) return null;
 
   return (
     <div aria-labelledby='cart-lines'>
@@ -59,19 +59,19 @@ function CartLines({
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 function CartLineItem({
   layout,
   line,
 }: {
-  layout: CartMainProps['layout']
-  line: CartLine
+  layout: CartMainProps['layout'];
+  line: CartLine;
 }) {
-  const { id, merchandise } = line
-  const { product, title, image, selectedOptions } = merchandise
-  const lineItemUrl = useVariantUrl(product.handle, selectedOptions)
+  const { id, merchandise } = line;
+  const { product, title, image, selectedOptions } = merchandise;
+  const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
 
   return (
     <li key={id} className='cart-line'>
@@ -93,7 +93,7 @@ function CartLineItem({
           onClick={() => {
             if (layout === 'aside') {
               // close the drawer
-              window.location.href = lineItemUrl
+              window.location.href = lineItemUrl;
             }
           }}
         >
@@ -114,11 +114,11 @@ function CartLineItem({
         <CartLineQuantity line={line} />
       </div>
     </li>
-  )
+  );
 }
 
 function CartCheckoutActions({ checkoutUrl }: { checkoutUrl: string }) {
-  if (!checkoutUrl) return null
+  if (!checkoutUrl) return null;
 
   return (
     <div>
@@ -127,7 +127,7 @@ function CartCheckoutActions({ checkoutUrl }: { checkoutUrl: string }) {
       </a>
       <br />
     </div>
-  )
+  );
 }
 
 export function CartSummary({
@@ -135,12 +135,12 @@ export function CartSummary({
   layout,
   children = null,
 }: {
-  children?: React.ReactNode
-  cost: CartApiQueryFragment['cost']
-  layout: CartMainProps['layout']
+  children?: React.ReactNode;
+  cost: CartApiQueryFragment['cost'];
+  layout: CartMainProps['layout'];
 }) {
   const className =
-    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside'
+    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   return (
     <div aria-labelledby='cart-summary' className={className}>
@@ -157,7 +157,7 @@ export function CartSummary({
       </dl>
       {children}
     </div>
-  )
+  );
 }
 
 function CartLineRemoveButton({ lineIds }: { lineIds: string[] }) {
@@ -169,14 +169,14 @@ function CartLineRemoveButton({ lineIds }: { lineIds: string[] }) {
     >
       <button type='submit'>Remove</button>
     </CartForm>
-  )
+  );
 }
 
 function CartLineQuantity({ line }: { line: CartLine }) {
-  if (!line || typeof line?.quantity === 'undefined') return null
-  const { id: lineId, quantity } = line
-  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0))
-  const nextQuantity = Number((quantity + 1).toFixed(0))
+  if (!line || typeof line?.quantity === 'undefined') return null;
+  const { id: lineId, quantity } = line;
+  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
+  const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
     <div className='cart-line-quantity'>
@@ -204,7 +204,7 @@ function CartLineQuantity({ line }: { line: CartLine }) {
       &nbsp;
       <CartLineRemoveButton lineIds={[lineId]} />
     </div>
-  )
+  );
 }
 
 function CartLinePrice({
@@ -212,34 +212,34 @@ function CartLinePrice({
   priceType = 'regular',
   ...passthroughProps
 }: {
-  line: CartLine
-  priceType?: 'regular' | 'compareAt'
-  [key: string]: any
+  line: CartLine;
+  priceType?: 'regular' | 'compareAt';
+  [key: string]: any;
 }) {
-  if (!line?.cost?.amountPerQuantity || !line?.cost?.totalAmount) return null
+  if (!line?.cost?.amountPerQuantity || !line?.cost?.totalAmount) return null;
 
   const moneyV2 =
     priceType === 'regular'
       ? line.cost.totalAmount
-      : line.cost.compareAtAmountPerQuantity
+      : line.cost.compareAtAmountPerQuantity;
 
   if (moneyV2 == null) {
-    return null
+    return null;
   }
 
   return (
     <div>
       <Money withoutTrailingZeros {...passthroughProps} data={moneyV2} />
     </div>
-  )
+  );
 }
 
 export function CartEmpty({
   hidden = false,
   layout = 'aside',
 }: {
-  hidden: boolean
-  layout?: CartMainProps['layout']
+  hidden: boolean;
+  layout?: CartMainProps['layout'];
 }) {
   return (
     <div hidden={hidden}>
@@ -253,25 +253,25 @@ export function CartEmpty({
         to='/collections'
         onClick={() => {
           if (layout === 'aside') {
-            window.location.href = '/collections'
+            window.location.href = '/collections';
           }
         }}
       >
         Continue shopping →
       </Link>
     </div>
-  )
+  );
 }
 
 function CartDiscounts({
   discountCodes,
 }: {
-  discountCodes: CartApiQueryFragment['discountCodes']
+  discountCodes: CartApiQueryFragment['discountCodes'];
 }) {
   const codes: string[] =
     discountCodes
       ?.filter((discount) => discount.applicable)
-      ?.map(({ code }) => code) || []
+      ?.map(({ code }) => code) || [];
 
   return (
     <div>
@@ -298,15 +298,15 @@ function CartDiscounts({
         </div>
       </UpdateDiscountForm>
     </div>
-  )
+  );
 }
 
 function UpdateDiscountForm({
   discountCodes,
   children,
 }: {
-  discountCodes?: string[]
-  children: React.ReactNode
+  discountCodes?: string[];
+  children: React.ReactNode;
 }) {
   return (
     <CartForm
@@ -318,15 +318,15 @@ function UpdateDiscountForm({
     >
       {children}
     </CartForm>
-  )
+  );
 }
 
 function CartLineUpdateButton({
   children,
   lines,
 }: {
-  children: React.ReactNode
-  lines: CartLineUpdateInput[]
+  children: React.ReactNode;
+  lines: CartLineUpdateInput[];
 }) {
   return (
     <CartForm
@@ -336,5 +336,5 @@ function CartLineUpdateButton({
     >
       {children}
     </CartForm>
-  )
+  );
 }

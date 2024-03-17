@@ -1,26 +1,23 @@
-import { Await } from '@remix-run/react'
-import { Suspense } from 'react'
+import { Await } from '@remix-run/react';
+import { Suspense } from 'react';
 import type {
   CartApiQueryFragment,
   FooterQuery,
   HeaderQuery,
-} from 'storefrontapi.generated'
-import { Aside } from '~/components/Aside'
-import { Footer } from '~/components/Footer'
-import { Header, HeaderMenu } from '~/components/Header'
-import { CartMain } from '~/components/Cart'
-import {
-  PredictiveSearchForm,
-  PredictiveSearchResults,
-} from '~/components/Search'
+} from 'storefrontapi.generated';
+import { Aside } from './aside';
+import { Footer } from './footer';
+import { Header, HeaderMenu } from './header';
+import { CartMain } from './cart';
+import { PredictiveSearchForm, PredictiveSearchResults } from './search';
 
 export type LayoutProps = {
-  cart: Promise<CartApiQueryFragment | null>
-  children?: React.ReactNode
-  footer: Promise<FooterQuery>
-  header: HeaderQuery
-  isLoggedIn: Promise<boolean>
-}
+  cart: Promise<CartApiQueryFragment | null>;
+  children?: React.ReactNode;
+  footer: Promise<FooterQuery>;
+  header: HeaderQuery;
+  isLoggedIn: Promise<boolean>;
+};
 
 export function Layout({
   cart,
@@ -42,7 +39,7 @@ export function Layout({
         </Await>
       </Suspense>
     </>
-  )
+  );
 }
 
 function CartAside({ cart }: { cart: LayoutProps['cart'] }) {
@@ -51,12 +48,12 @@ function CartAside({ cart }: { cart: LayoutProps['cart'] }) {
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await resolve={cart}>
           {(cart) => {
-            return <CartMain cart={cart} layout='aside' />
+            return <CartMain cart={cart} layout='aside' />;
           }}
         </Await>
       </Suspense>
     </Aside>
-  )
+  );
 }
 
 function SearchAside() {
@@ -80,7 +77,7 @@ function SearchAside() {
                 onClick={() => {
                   window.location.href = inputRef?.current?.value
                     ? `/search?q=${inputRef.current.value}`
-                    : `/search`
+                    : `/search`;
                 }}
               >
                 Search
@@ -91,15 +88,15 @@ function SearchAside() {
         <PredictiveSearchResults />
       </div>
     </Aside>
-  )
+  );
 }
 
 function MobileMenuAside({
   menu,
   shop,
 }: {
-  menu: HeaderQuery['menu']
-  shop: HeaderQuery['shop']
+  menu: HeaderQuery['menu'];
+  shop: HeaderQuery['shop'];
 }) {
   return (
     menu &&
@@ -112,5 +109,5 @@ function MobileMenuAside({
         />
       </Aside>
     )
-  )
+  );
 }

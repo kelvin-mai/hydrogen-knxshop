@@ -7,10 +7,10 @@
 - This is an important fix to a bug with 404 routes and path-based i18n projects where some unknown routes would not properly render a 404. This fixes all new projects, but to fix existing projects, add a `($locale).tsx` route with the following contents: ([#1732](https://github.com/Shopify/hydrogen/pull/1732)) by [@blittle](https://github.com/blittle)
 
   ```ts
-  import { type LoaderFunctionArgs } from '@remix-run/server-runtime'
+  import { type LoaderFunctionArgs } from '@remix-run/server-runtime';
 
   export async function loader({ params, context }: LoaderFunctionArgs) {
-    const { language, country } = context.storefront.i18n
+    const { language, country } = context.storefront.i18n;
 
     if (
       params.locale &&
@@ -18,10 +18,10 @@
     ) {
       // If the locale URL param is defined, yet we still are still at the default locale
       // then the the locale param must be invalid, send to the 404 page
-      throw new Response(null, { status: 404 })
+      throw new Response(null, { status: 404 });
     }
 
-    return null
+    return null;
   }
   ```
 
@@ -293,13 +293,13 @@
   ```ts
   // root.tsx
 
-  import { useMatches } from '@remix-run/react'
-  import { type SerializeFrom } from '@shopify/remix-oxygen'
+  import { useMatches } from '@remix-run/react';
+  import { type SerializeFrom } from '@shopify/remix-oxygen';
 
   export const useRootLoaderData = () => {
-    const [root] = useMatches()
-    return root?.data as SerializeFrom<typeof loader>
-  }
+    const [root] = useMatches();
+    return root?.data as SerializeFrom<typeof loader>;
+  };
 
   export function loader(context) {
     // ...
