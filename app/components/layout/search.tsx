@@ -15,6 +15,7 @@ import type {
   PredictiveArticleFragment,
   SearchQuery,
 } from 'storefrontapi.generated';
+import { RawHtml } from '../common';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -430,11 +431,7 @@ function SearchResultItem({ goToSearchResult, item }: SearchResultItemProps) {
         )}
         <div>
           {item.styledTitle ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: item.styledTitle,
-              }}
-            />
+            <RawHtml html={item.styledTitle} />
           ) : (
             <span>{item.title}</span>
           )}

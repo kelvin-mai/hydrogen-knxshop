@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({ menu, shop }) => {
           </div>
         )}
         <PaymentList />
-        <div className='text-center text-sm'>
+        <div className='pt-4 text-center text-sm'>
           <p className='inline-flex items-center'>
             © {today.getFullYear()} Seeland Jung USA |{' '}
             <a

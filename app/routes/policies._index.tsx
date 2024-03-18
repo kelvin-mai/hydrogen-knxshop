@@ -1,7 +1,8 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { useLoaderData, Link } from '@remix-run/react';
+import { useLoaderData, Link, MetaFunction } from '@remix-run/react';
 
 import { POLICIES_QUERY } from '~/graphql/storefront/policy';
+import { createMeta } from '~/lib/meta';
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
   const data = await context.storefront.query(POLICIES_QUERY);
@@ -13,6 +14,11 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
 
   return json({ policies });
 };
+
+export const meta: MetaFunction = () =>
+  createMeta({
+    title: 'Policies',
+  });
 
 export default function Policies() {
   const { policies } = useLoaderData<typeof loader>();

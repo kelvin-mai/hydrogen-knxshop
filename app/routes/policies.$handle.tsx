@@ -3,6 +3,7 @@ import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
 import { type Shop } from '@shopify/hydrogen/storefront-api-types';
 
 import { POLICY_CONTENT_QUERY } from '~/graphql/storefront/policy';
+import { RawHtml } from '~/components/common';
 
 type SelectedPolicies = keyof Pick<
   Shop,
@@ -51,8 +52,8 @@ export default function Policy() {
       <div>
         <Link to='/policies'>← Back to Policies</Link>
       </div>
-      <h1>{policy.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: policy.body }} />
+      <h1 className='py-4 text-4xl font-bold'>{policy.title}</h1>
+      <RawHtml html={policy.body} />
     </div>
   );
 }

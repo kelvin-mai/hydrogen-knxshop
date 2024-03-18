@@ -3,10 +3,7 @@ import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
 import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
 
 import { BLOGS_QUERY } from '~/graphql/storefront';
-
-export const meta: MetaFunction = () => {
-  return [{ title: `Hydrogen | Blogs` }];
-};
+import { createMeta } from '~/lib/meta';
 
 export const loader = async ({
   request,
@@ -24,6 +21,8 @@ export const loader = async ({
 
   return json({ blogs });
 };
+
+export const meta: MetaFunction = () => createMeta({ title: 'Blogs' });
 
 export default function Blogs() {
   const { blogs } = useLoaderData<typeof loader>();

@@ -18,12 +18,11 @@ import {
   type ShouldRevalidateFunction,
 } from '@remix-run/react';
 import type { CustomerAccessToken } from '@shopify/hydrogen/storefront-api-types';
-import resetStyles from './styles/reset.css';
-import appStyles from './styles/app.css';
-import { Layout } from '~/components/layout';
-import tailwindCss from './styles/tailwind.css';
+
 import { HEADER_QUERY, FOOTER_QUERY } from '~/graphql/storefront';
+import tailwindCss from './styles/tailwind.css';
 import { faviconLinks } from './lib/favicon';
+import { Layout } from '~/components/layout';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -49,8 +48,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export function links() {
   return [
     { rel: 'stylesheet', href: tailwindCss },
-    { rel: 'stylesheet', href: resetStyles },
-    { rel: 'stylesheet', href: appStyles },
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
