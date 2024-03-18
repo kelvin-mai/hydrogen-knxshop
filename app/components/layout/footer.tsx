@@ -1,6 +1,8 @@
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
-import { FooterMenu } from './menu';
-import { PaymentList } from './payment-list';
+
+import { FALLBACK_FOOTER_MENU } from '~/constants/fallbacks';
+import { PaymentList } from '~/components/common';
+import { NavItem } from './nav-item';
 
 type FooterProps = FooterQuery & {
   shop: HeaderQuery['shop'];
@@ -12,14 +14,22 @@ export const Footer: React.FC<FooterProps> = ({ menu, shop }) => {
     <footer className='mt-auto bg-black pb-4 text-white'>
       <div className='container'>
         {menu && shop?.primaryDomain?.url && (
-          <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+          <div className='flex items-center gap-4 p-4' role='navigation'>
+            {(menu || FALLBACK_FOOTER_MENU).items.map((i) => (
+              <NavItem
+                key={i.id}
+                url={i.url}
+                title={i.title}
+                primaryDomainUrl={shop.primaryDomain.url}
+              />
+            ))}
+          </div>
         )}
         <PaymentList />
         <div className='text-center text-sm'>
           <p className='inline-flex items-center'>
             © {today.getFullYear()} Seeland Jung USA |{' '}
             <a
-              className='text-white'
               rel='noopener noreferrer'
               target='_blank'
               href='https://kelvinmai.io'
@@ -30,12 +40,19 @@ export const Footer: React.FC<FooterProps> = ({ menu, shop }) => {
           <p>
             Powered by{' '}
             <a
-              className='text-white'
               rel='noopener noreferrer'
               target='_blank'
               href='https://www.shopify.com/?utm_campaign=poweredby&utm_medium=shopify&utm_source=onlinestore'
             >
               Shopify
+            </a>{' '}
+            and{' '}
+            <a
+              rel='noopener noreferrer'
+              target='_blank'
+              href='https://hydrogen.shopify.dev/'
+            >
+              Hydrogen
             </a>
           </p>
         </div>
