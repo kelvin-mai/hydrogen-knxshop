@@ -1,5 +1,5 @@
-import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData, Link, MetaFunction } from '@remix-run/react';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 
 import { POLICIES_QUERY } from '~/graphql/storefront/policy';
 import { createMeta } from '~/lib/meta';

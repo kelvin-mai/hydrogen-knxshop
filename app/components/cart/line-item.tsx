@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import { Image } from '@shopify/hydrogen';
+
 import { CartApiQueryFragment } from 'storefrontapi.generated';
 import { useVariantUrl } from '~/lib/variants';
 import { CartLinePrice } from './line-price';

@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react';
-
 import { Form } from '@remix-run/react';
+
 import { Input, Button } from '~/components/ui';
 
-export const SearchForm = ({ searchTerm }: { searchTerm: string }) => {
+type SearchFormProps = {
+  searchTerm?: string;
+};
+
+export const SearchForm: React.FC<SearchFormProps> = ({ searchTerm }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // focus the input when cmd+k is pressed
@@ -24,7 +28,7 @@ export const SearchForm = ({ searchTerm }: { searchTerm: string }) => {
   }, []);
 
   return (
-    <Form method='get' className='flex gap-4'>
+    <Form action='/search' method='get' className='flex gap-4'>
       <Input
         defaultValue={searchTerm}
         name='q'

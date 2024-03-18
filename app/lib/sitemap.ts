@@ -1,4 +1,5 @@
 import { flattenConnection } from '@shopify/hydrogen';
+
 import type { SitemapQuery } from 'storefrontapi.generated';
 
 /**

@@ -1,5 +1,5 @@
-import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData, type MetaFunction } from '@remix-run/react';
+import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { getPaginationVariables } from '@shopify/hydrogen';
 
 import { SEARCH_QUERY } from '~/graphql/storefront';
@@ -49,7 +49,6 @@ export const meta: MetaFunction = () => createMeta({ title: 'Search' });
 
 export default function SearchPage() {
   const { searchTerm, searchResults } = useLoaderData<typeof loader>();
-  console.log({ searchTerm, searchResults });
   return (
     <div>
       <h1>Search</h1>

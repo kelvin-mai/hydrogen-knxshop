@@ -1,7 +1,7 @@
 import { CartForm } from '@shopify/hydrogen';
 import { Plus, Minus } from 'lucide-react';
-import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
 import { Button } from '~/components/ui';
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];

@@ -1,5 +1,5 @@
-import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { useLoaderData, type MetaFunction } from '@remix-run/react';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
 
 import { BLOG_QUERY } from '~/graphql/storefront';

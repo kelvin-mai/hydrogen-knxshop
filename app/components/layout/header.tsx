@@ -1,14 +1,11 @@
-import { Await, Link, NavLink } from '@remix-run/react';
-import { Menu, ShoppingCart } from 'lucide-react';
 import { Suspense } from 'react';
-import type { HeaderQuery } from 'storefrontapi.generated';
-import type { LayoutProps } from './layout';
-import { useRootLoaderData } from '~/root';
+import { Await, NavLink } from '@remix-run/react';
+import { Menu, ShoppingCart } from 'lucide-react';
+
 import { FALLBACK_HEADER_MENU } from '~/constants/fallbacks';
+import type { LayoutProps } from './layout';
 
 import {
-  Button,
-  Input,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -17,7 +14,7 @@ import {
 } from '~/components/ui';
 import { NavItem } from './nav-item';
 import { CartAside } from '~/components/cart';
-import { PredictiveSearchForm } from '.';
+import { SearchForm } from '../search';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -49,29 +46,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
             <div className='flex flex-col'>{menuItems}</div>
           </SheetContent>
         </Sheet>
-        <PredictiveSearchForm>
-          {({ fetchResults, inputRef }) => (
-            <div className='flex items-center gap-2'>
-              <Input
-                name='q'
-                onChange={fetchResults}
-                onFocus={fetchResults}
-                placeholder='Search'
-                ref={inputRef}
-                type='search'
-              />
-              <Link
-                to={
-                  inputRef?.current?.value
-                    ? `/search?q=${inputRef.current.value}`
-                    : '/search'
-                }
-              >
-                <Button>Submit</Button>
-              </Link>
-            </div>
-          )}
-        </PredictiveSearchForm>
+        <SearchForm />
         <div className='flex items-center'>
           <NavLink prefetch='intent' to='/account'>
             <Suspense fallback='Sign in'>

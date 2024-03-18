@@ -1,5 +1,4 @@
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
-
 import { FALLBACK_FOOTER_MENU } from '~/constants/fallbacks';
 import { PaymentList } from '~/components/common';
 import { NavItem } from './nav-item';

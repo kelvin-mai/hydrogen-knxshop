@@ -1,13 +1,12 @@
-import { Await, Link, type MetaFunction } from '@remix-run/react';
 import { Suspense } from 'react';
-import type { CartQueryDataReturn } from '@shopify/hydrogen';
-import { CartForm } from '@shopify/hydrogen';
+import { Await, Link, type MetaFunction } from '@remix-run/react';
 import { json, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+import { CartForm, type CartQueryDataReturn } from '@shopify/hydrogen';
 
-import { useRootLoaderData } from '~/root';
 import { createMeta } from '~/lib/meta';
 import { CartDetails } from '~/components/cart';
 import { Button } from '~/components/ui';
+import { useRootLoaderData } from '~/root';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { cart } = context;

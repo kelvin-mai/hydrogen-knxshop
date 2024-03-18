@@ -1,6 +1,7 @@
 import { ShoppingCart } from 'lucide-react';
-import { CartApiQueryFragment } from 'storefrontapi.generated';
 
+import { CartApiQueryFragment } from 'storefrontapi.generated';
+import { cn } from '~/lib/classname';
 import {
   Button,
   Sheet,
@@ -11,7 +12,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '~/components/ui';
-import { cn } from '~/lib/classname';
 import { CartDetails } from './details';
 
 type CartAsideProps = {
