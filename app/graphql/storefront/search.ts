@@ -92,3 +92,113 @@ export const PREDICTIVE_SEARCH_QUERY = `#graphql
     }
   }
 ` as const;
+
+export const SEARCH_QUERY = `#graphql
+  fragment SearchProduct on Product {
+    __typename
+    handle
+    id
+    publishedAt
+    title
+    trackingParameters
+    vendor
+    variants(first: 1) {
+      nodes {
+        id
+        image {
+          url
+          altText
+          width
+          height
+        }
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+        selectedOptions {
+          name
+          value
+        }
+        product {
+          handle
+          title
+        }
+      }
+    }
+  }
+  fragment SearchPage on Page {
+     __typename
+     handle
+    id
+    title
+    trackingParameters
+  }
+  fragment SearchArticle on Article {
+    __typename
+    handle
+    id
+    title
+    trackingParameters
+    blog {
+      handle
+    }
+  }
+  query search(
+    $country: CountryCode
+    $endCursor: String
+    $first: Int
+    $language: LanguageCode
+    $last: Int
+    $query: String!
+    $startCursor: String
+  ) @inContext(country: $country, language: $language) {
+    products: search(
+      query: $query,
+      unavailableProducts: HIDE,
+      types: [PRODUCT],
+      first: $first,
+      sortKey: RELEVANCE,
+      last: $last,
+      before: $startCursor,
+      after: $endCursor
+    ) {
+      nodes {
+        ...on Product {
+          ...SearchProduct
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+    pages: search(
+      query: $query,
+      types: [PAGE],
+      first: 10
+    ) {
+      nodes {
+        ...on Page {
+          ...SearchPage
+        }
+      }
+    }
+    articles: search(
+      query: $query,
+      types: [ARTICLE],
+      first: 10
+    ) {
+      nodes {
+        ...on Article {
+          ...SearchArticle
+        }
+      }
+    }
+  }
+` as const;

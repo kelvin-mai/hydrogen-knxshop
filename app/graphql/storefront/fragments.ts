@@ -1,4 +1,3 @@
-// NOTE: https://shopify.dev/docs/api/storefront/latest/queries/cart
 export const CART_QUERY_FRAGMENT = `#graphql
   fragment Money on MoneyV2 {
     currencyCode
@@ -97,6 +96,56 @@ export const CART_QUERY_FRAGMENT = `#graphql
     discountCodes {
       code
       applicable
+    }
+  }
+` as const;
+
+export const COLLECTION_FRAGMENT = `#graphql
+  fragment Collection on Collection {
+    id
+    title
+    handle
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+` as const;
+
+export const PRODUCT_ITEM_FRAGMENT = `#graphql
+  fragment MoneyProductItem on MoneyV2 {
+    amount
+    currencyCode
+  }
+  fragment ProductItem on Product {
+    id
+    handle
+    title
+    featuredImage {
+      id
+      altText
+      url
+      width
+      height
+    }
+    priceRange {
+      minVariantPrice {
+        ...MoneyProductItem
+      }
+      maxVariantPrice {
+        ...MoneyProductItem
+      }
+    }
+    variants(first: 1) {
+      nodes {
+        selectedOptions {
+          name
+          value
+        }
+      }
     }
   }
 ` as const;

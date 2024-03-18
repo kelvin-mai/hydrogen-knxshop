@@ -1,4 +1,4 @@
-import { Await, NavLink } from '@remix-run/react';
+import { Await, Link, NavLink } from '@remix-run/react';
 import { Menu, ShoppingCart } from 'lucide-react';
 import { Suspense } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
@@ -7,6 +7,8 @@ import { useRootLoaderData } from '~/root';
 import { FALLBACK_HEADER_MENU } from '~/constants/fallbacks';
 
 import {
+  Button,
+  Input,
   Sheet,
   SheetContent,
   SheetHeader,
@@ -15,6 +17,7 @@ import {
 } from '~/components/ui';
 import { NavItem } from './nav-item';
 import { CartAside } from '~/components/cart';
+import { PredictiveSearchForm } from '.';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -31,7 +34,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   ));
   return (
     <header>
-      <div className='flex justify-between px-8 pt-2'>
+      <div className='flex items-center justify-between px-8 pt-2'>
         <NavLink prefetch='intent' to='/' end>
           <img src='/assets/logo.webp' alt='Brand Logo' className='h-[65px]' />
         </NavLink>
@@ -46,6 +49,29 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
             <div className='flex flex-col'>{menuItems}</div>
           </SheetContent>
         </Sheet>
+        <PredictiveSearchForm>
+          {({ fetchResults, inputRef }) => (
+            <div className='flex items-center gap-2'>
+              <Input
+                name='q'
+                onChange={fetchResults}
+                onFocus={fetchResults}
+                placeholder='Search'
+                ref={inputRef}
+                type='search'
+              />
+              <Link
+                to={
+                  inputRef?.current?.value
+                    ? `/search?q=${inputRef.current.value}`
+                    : '/search'
+                }
+              >
+                <Button>Submit</Button>
+              </Link>
+            </div>
+          )}
+        </PredictiveSearchForm>
         <div className='flex items-center'>
           <NavLink prefetch='intent' to='/account'>
             <Suspense fallback='Sign in'>
