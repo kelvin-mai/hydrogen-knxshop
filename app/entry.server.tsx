@@ -10,7 +10,12 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const { nonce, header, NonceProvider } = createContentSecurityPolicy();
+  const { nonce, header, NonceProvider } = createContentSecurityPolicy({
+    connectSrc: [
+      'wss://https://exciting-usefully-dane.ngrok-free.app',
+      'wss://https://exciting-usefully-dane.ngrok-free.app:*',
+    ],
+  });
 
   const body = await renderToReadableStream(
     <NonceProvider>
