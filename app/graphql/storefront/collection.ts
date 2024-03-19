@@ -1,4 +1,4 @@
-import { COLLECTION_FRAGMENT } from './fragments';
+import { COLLECTION_FRAGMENT, COLLECTION_PRODUCT_FRAGMENT } from './fragments';
 
 export const FEATURED_COLLECTIONS_QUERY = `#graphql
   ${COLLECTION_FRAGMENT}
@@ -53,6 +53,7 @@ export const COLLECTIONS_QUERY = `#graphql
 ` as const;
 
 export const COLLECTION_DETAILS_QUERY = `#graphql
+  ${COLLECTION_PRODUCT_FRAGMENT}
   query CollectionDetails(
     $handle: String!
     $first: Int
@@ -72,29 +73,7 @@ export const COLLECTION_DETAILS_QUERY = `#graphql
         after: $endCursor,
       ) {
         nodes {
-          id
-          title
-          publishedAt
-          handle
-          variants(first: 1) {
-            nodes {
-              id
-              image {
-                url
-                altText
-                width
-                height
-              }
-              price {
-                amount
-                currencyCode
-              }
-              compareAtPrice {
-                amount
-                currencyCode
-              }
-            }
-          }
+          ...CollectionProduct
         }
         pageInfo {
           hasPreviousPage

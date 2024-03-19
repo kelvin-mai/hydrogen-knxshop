@@ -115,6 +115,36 @@ export const COLLECTION_FRAGMENT = `#graphql
   }
 ` as const;
 
+export const COLLECTION_PRODUCT_FRAGMENT = `#graphql
+  fragment MoneyCollectionProduct on MoneyV2 {
+    amount
+    currencyCode
+  }
+  fragment CollectionProduct on Product {
+    id
+    title
+    publishedAt
+    handle
+    variants(first: 1) {
+      nodes {
+        id
+        image {
+          url
+          altText
+          width
+          height
+        }
+        price {
+          ...MoneyCollectionProduct
+        }
+        compareAtPrice {
+          ...MoneyCollectionProduct
+        }
+      }
+    }
+  }
+` as const;
+
 export const PRODUCT_ITEM_FRAGMENT = `#graphql
   fragment MoneyProductItem on MoneyV2 {
     amount
