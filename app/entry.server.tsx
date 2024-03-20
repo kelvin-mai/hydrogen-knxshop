@@ -11,6 +11,7 @@ export default async function handleRequest(
   remixContext: EntryContext,
 ) {
   const { nonce, header, NonceProvider } = createContentSecurityPolicy({
+    styleSrc: ["'self'", 'https://cdn.shopify.com'],
     connectSrc: [
       'wss://https://exciting-usefully-dane.ngrok-free.app',
       'wss://https://exciting-usefully-dane.ngrok-free.app:*',

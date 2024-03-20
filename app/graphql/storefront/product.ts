@@ -70,6 +70,11 @@ export const PRODUCT_QUERY = `#graphql
     $language: LanguageCode
     $selectedOptions: [SelectedOptionInput!]!
   ) @inContext(country: $country, language: $language) {
+    shop {
+      primaryDomain {
+        url
+      }
+    }
     product(handle: $handle) {
       ...Product
     }

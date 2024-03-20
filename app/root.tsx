@@ -110,6 +110,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
+  // console.log('root data', data);
 
   return (
     <html lang='en'>

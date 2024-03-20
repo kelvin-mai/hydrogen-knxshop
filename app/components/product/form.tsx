@@ -1,24 +1,28 @@
 import { FetcherWithComponents, Link } from '@remix-run/react';
-import { CartForm, VariantSelector } from '@shopify/hydrogen';
+import { CartForm, ShopPayButton, VariantSelector } from '@shopify/hydrogen';
+
 import {
   ProductFragment,
   ProductVariantFragment,
 } from 'storefrontapi.generated';
 import { cn } from '~/lib/classname';
+import { Button } from '~/components/ui';
 
 type ProductFormProps = {
   product: ProductFragment;
   variants: ProductVariantFragment[];
   analytics?: unknown;
+  storeDomain?: string;
 };
 
 export const ProductForm: React.FC<ProductFormProps> = ({
   analytics,
   product,
   variants,
+  storeDomain,
 }) => {
   return (
-    <div>
+    <div className='flex flex-col gap-2 pt-4'>
       <VariantSelector
         handle={product.handle}
         options={product.options}
@@ -26,8 +30,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       >
         {({ option }) => (
           <div key={option.name}>
-            <h5>{option.name}</h5>
-            <div>
+            <h5 className='text-lg font-bold'>{option.name}</h5>
+            <div className='flex flex-wrap gap-2'>
               {option.values.map(({ value, isAvailable, isActive, to }) => (
                 <Link
                   key={option.name + value}
@@ -36,9 +40,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   replace
                   to={to}
                   className={cn(
+                    'rounded border-2 px-2',
                     isActive
-                      ? 'border border-black'
-                      : 'border border-transparent',
+                      ? 'border-mantis-500 bg-mantis-100'
+                      : 'border-transparent',
                     isAvailable ? 'opacity-100' : 'opacity-30',
                   )}
                 >
@@ -65,7 +70,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               type='hidden'
               value={JSON.stringify(analytics)}
             />
-            <button
+            <Button
+              className='text-md w-full'
               onClick={() => {}}
               disabled={
                 !product.selectedVariant ||
@@ -76,10 +82,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               {product.selectedVariant?.availableForSale
                 ? 'Add to cart'
                 : 'Sold out'}
-            </button>
+            </Button>
           </>
         )}
       </CartForm>
+      {product.selectedVariant?.availableForSale && storeDomain && (
+        <ShopPayButton
+          width='100%'
+          className='overflow-hidden rounded-md'
+          variantIds={[product.selectedVariant.id]}
+          storeDomain={storeDomain}
+        />
+      )}
     </div>
   );
 };

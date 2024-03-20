@@ -4,6 +4,7 @@ import { Pagination, getPaginationVariables, Image } from '@shopify/hydrogen';
 import type { CollectionsQuery } from 'storefrontapi.generated';
 import { COLLECTIONS_QUERY } from '~/graphql/storefront';
 import { CollectionsGrid } from '~/components/collections/grid';
+import { PageLayout } from '~/components/common';
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const paginationVariables = getPaginationVariables(request, {
@@ -20,8 +21,7 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
 export default function Collections() {
   const { collections }: CollectionsQuery = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Collections</h1>
+    <PageLayout title='Collections'>
       <Pagination connection={collections}>
         {({ nodes, isLoading, PreviousLink, NextLink }) => (
           <div>
@@ -35,6 +35,6 @@ export default function Collections() {
           </div>
         )}
       </Pagination>
-    </div>
+    </PageLayout>
   );
 }

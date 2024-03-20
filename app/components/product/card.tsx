@@ -30,10 +30,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           />
         </div>
         <div className='grid gap-1'>
-          <h3 className='text-copy w-full max-w-prose overflow-hidden text-ellipsis whitespace-nowrap '>
+          <h3 className='w-full max-w-prose overflow-hidden text-ellipsis whitespace-nowrap font-semibold'>
             {product.title}
           </h3>
-          <div className='flex gap-4'>
+          <p>
             <span className='inherit text-copy flex max-w-prose gap-4 whitespace-pre-wrap'>
               <Money withoutTrailingZeros data={price} />
               {isDiscounted && (
@@ -44,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 />
               )}
             </span>
-          </div>
+          </p>
         </div>
       </div>
     </Link>

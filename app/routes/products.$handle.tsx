@@ -7,7 +7,7 @@ import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import { PRODUCT_QUERY, VARIANTS_QUERY } from '~/graphql/storefront';
 import { redirectToFirstVariant } from '~/lib/variants';
 import { createMeta } from '~/lib/meta';
-import { RawHtml } from '~/components/common';
+import { PageLayout, RawHtml } from '~/components/common';
 import { ProductForm } from '~/components/product';
 
 export async function loader({ params, request, context }: LoaderFunctionArgs) {
@@ -31,7 +31,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   }
 
   // await the query for the critical product data
-  const { product } = await storefront.query(PRODUCT_QUERY, {
+  const { shop, product } = await storefront.query(PRODUCT_QUERY, {
     variables: { handle, selectedOptions },
   });
 
@@ -66,61 +66,72 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     variables: { handle },
   });
 
-  return defer({ product, variants });
+  return defer({ shop, product, variants });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) =>
   createMeta({ title: data?.product.title });
 
 export default function Product() {
-  const { product, variants } = useLoaderData<typeof loader>();
+  const { shop, product, variants } = useLoaderData<typeof loader>();
   const { selectedVariant } = product;
   return (
-    <div className='product'>
-      {selectedVariant?.image && (
-        <Image
-          alt={selectedVariant.image.altText || 'Product Image'}
-          aspectRatio='1/1'
-          data={selectedVariant.image}
-          key={selectedVariant.image.id}
-          sizes='(min-width: 45em) 50vw, 100vw'
-        />
-      )}
-      <div>
-        <h1>{product.title}</h1>
+    <PageLayout title={product.title}>
+      <div className='grid grid-cols-2 gap-4'>
+        {selectedVariant?.image && (
+          <Image
+            alt={selectedVariant.image.altText || 'Product Image'}
+            aspectRatio='1/1'
+            data={selectedVariant.image}
+            key={selectedVariant.image.id}
+            sizes='(min-width: 45em) 50vw, 100vw'
+          />
+        )}
         <div>
-          {selectedVariant?.compareAtPrice ? (
-            <>
-              <p>Sale</p>
-              <div>
-                {selectedVariant ? (
-                  <Money data={selectedVariant.price} />
-                ) : null}
-                <s>
-                  <Money data={selectedVariant.compareAtPrice} />
-                </s>
+          <h1 className='pb-4 text-xl font-bold'>{product.title}</h1>
+          <>
+            {selectedVariant?.compareAtPrice ? (
+              <div className='text-lg'>
+                <p>Sale</p>
+                <div>
+                  {selectedVariant ? (
+                    <Money data={selectedVariant.price} />
+                  ) : null}
+                  <s>
+                    <Money data={selectedVariant.compareAtPrice} />
+                  </s>
+                </div>
               </div>
-            </>
-          ) : (
-            selectedVariant?.price && <Money data={selectedVariant?.price} />
-          )}
-        </div>
-        <Suspense fallback={<ProductForm product={product} variants={[]} />}>
-          <Await
-            errorElement='There was a problem loading product variants'
-            resolve={variants}
-          >
-            {(data) => (
-              <ProductForm
-                product={product}
-                variants={data.product?.variants.nodes || []}
-              />
+            ) : (
+              selectedVariant?.price && (
+                <div className='text-lg'>
+                  <Money data={selectedVariant?.price} />
+                </div>
+              )
             )}
-          </Await>
-        </Suspense>
-        <h2>Description</h2>
-        <RawHtml html={product.descriptionHtml} />
+          </>
+          <Suspense fallback={<ProductForm product={product} variants={[]} />}>
+            <Await
+              errorElement='There was a problem loading product variants'
+              resolve={variants}
+            >
+              {(data) => (
+                <ProductForm
+                  product={product}
+                  variants={data.product?.variants.nodes || []}
+                  storeDomain={shop.primaryDomain.url}
+                />
+              )}
+            </Await>
+          </Suspense>
+        </div>
       </div>
-    </div>
+      {product.descriptionHtml && (
+        <>
+          <h2 className='py-2 text-xl font-bold'>Description</h2>
+          <RawHtml html={product.descriptionHtml} />
+        </>
+      )}
+    </PageLayout>
   );
 }

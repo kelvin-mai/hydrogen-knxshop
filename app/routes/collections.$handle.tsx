@@ -12,6 +12,7 @@ import { ProductGrid } from '~/components/product/grid';
 
 import { COLLECTION_DETAILS_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
+import { PageLayout } from '~/components/common';
 
 export const loader = async ({
   params: { handle },
@@ -50,21 +51,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) =>
 export default function Collection() {
   const { collection } = useLoaderData<typeof loader>();
   return (
-    <>
-      <header className='grid w-full justify-items-start gap-8 py-8'>
-        <h1 className='inline-block whitespace-pre-wrap text-4xl font-bold'>
-          {collection.title}
-        </h1>
-        {collection.description && (
-          <div className='flex w-full items-baseline justify-between'>
-            <div>
-              <p className='inherit text-copy inline-block max-w-md whitespace-pre-wrap'>
-                {collection.description}
-              </p>
-            </div>
-          </div>
-        )}
-      </header>
+    <PageLayout title={collection.title} description={collection.description}>
       <Pagination connection={collection.products}>
         {({ nodes, isLoading, PreviousLink, NextLink }) => (
           <>
@@ -78,6 +65,6 @@ export default function Collection() {
           </>
         )}
       </Pagination>
-    </>
+    </PageLayout>
   );
 }
