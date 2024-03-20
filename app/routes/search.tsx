@@ -5,6 +5,7 @@ import { getPaginationVariables } from '@shopify/hydrogen';
 import { SEARCH_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
 import { SearchForm, SearchResults } from '~/components/search';
+import { PageLayout } from '~/components/common';
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -50,8 +51,7 @@ export const meta: MetaFunction = () => createMeta({ title: 'Search' });
 export default function SearchPage() {
   const { searchTerm, searchResults } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Search</h1>
+    <PageLayout title='Search'>
       <SearchForm searchTerm={searchTerm} />
       {!searchTerm || !searchResults.totalResults ? (
         <p>No results, try a different search.</p>
@@ -61,6 +61,6 @@ export default function SearchPage() {
           searchTerm={searchTerm}
         />
       )}
-    </div>
+    </PageLayout>
   );
 }

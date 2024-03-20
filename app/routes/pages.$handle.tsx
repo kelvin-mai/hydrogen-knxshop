@@ -4,7 +4,7 @@ import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { PageQuery } from 'storefrontapi.generated';
 import { PAGE_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
-import { RawHtml } from '~/components/common';
+import { PageLayout, RawHtml } from '~/components/common';
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   if (!params.handle) {
@@ -33,13 +33,8 @@ export default function Page() {
   const { page } = useLoaderData<typeof loader>();
 
   return (
-    <div className='page'>
-      <header>
-        <h1>{page.title}</h1>
-      </header>
-      <main>
-        <RawHtml html={page.body} />
-      </main>
-    </div>
+    <PageLayout title={page.title}>
+      <RawHtml html={page.body} />
+    </PageLayout>
   );
 }

@@ -15,6 +15,7 @@ import {
 import { NavItem } from './nav-item';
 import { CartAside } from '~/components/cart';
 import { SearchForm } from '../search';
+import { HeaderMenu } from './header-menu';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -48,22 +49,20 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         </Sheet>
         <SearchForm />
         <div className='flex items-center'>
-          <NavLink prefetch='intent' to='/account'>
+          {/* <NavLink prefetch='intent' to='/account'>
             <Suspense fallback='Sign in'>
               <Await resolve={isLoggedIn} errorElement='Sign in'>
                 {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
               </Await>
             </Suspense>
-          </NavLink>
+          </NavLink> */}
           <Suspense fallback={<ShoppingCart />}>
-            <Await resolve={cart}>
-              {(cart) => (cart ? <CartAside cart={cart} /> : null)}
-            </Await>
+            <Await resolve={cart}>{(cart) => <CartAside cart={cart} />}</Await>
           </Suspense>
         </div>
       </div>
-      <nav className='hidden bg-slate-200 sm:block' role='navigation'>
-        <div className='container flex gap-2'>{menuItems}</div>
+      <nav className='container' role='navigation'>
+        <HeaderMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
       </nav>
     </header>
   );

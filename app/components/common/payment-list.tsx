@@ -1,4 +1,8 @@
-export const PaymentList = () => {
+import { cn } from '~/lib/classname';
+
+export const PaymentList: React.FC<{ className?: string }> = ({
+  className,
+}) => {
   const svgs = [
     {
       name: 'amex',
@@ -47,7 +51,7 @@ export const PaymentList = () => {
   ];
 
   return (
-    <ul className='flex flex-wrap justify-center gap-2'>
+    <ul className={cn('flex flex-wrap justify-center gap-2', className)}>
       {svgs.map((svg) => (
         <li key={svg.name}>
           <img src={`/assets/payment-cards/${svg.name}.svg`} alt={svg.alt} />

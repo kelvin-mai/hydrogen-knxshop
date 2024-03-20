@@ -7,6 +7,7 @@ import { createMeta } from '~/lib/meta';
 import { CartDetails } from '~/components/cart';
 import { Button } from '~/components/ui';
 import { useRootLoaderData } from '~/root';
+import { PageLayout } from '~/components/common';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const { cart } = context;
@@ -89,8 +90,7 @@ export default function Cart() {
   const cartPromise = rootData.cart;
 
   return (
-    <div className='cart'>
-      <h1>Cart</h1>
+    <PageLayout title='Cart'>
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await
           resolve={cartPromise}
@@ -113,6 +113,6 @@ export default function Cart() {
           }
         </Await>
       </Suspense>
-    </div>
+    </PageLayout>
   );
 }

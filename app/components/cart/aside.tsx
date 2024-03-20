@@ -15,7 +15,7 @@ import {
 import { CartDetails } from './details';
 
 type CartAsideProps = {
-  cart: CartApiQueryFragment;
+  cart?: CartApiQueryFragment | null;
 };
 
 export const CartAside: React.FC<CartAsideProps> = ({ cart }) => {
@@ -24,26 +24,28 @@ export const CartAside: React.FC<CartAsideProps> = ({ cart }) => {
       <SheetTrigger>
         <div className='relative p-2'>
           <ShoppingCart />
-          <div
-            className={cn(
-              'absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-sm text-white',
-              cart.totalQuantity > 0 || 'hidden',
-            )}
-          >
-            {cart.totalQuantity || 0}
-          </div>
+          {cart && cart.totalQuantity ? (
+            <div
+              className={cn(
+                'bg-mantis-500 absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-sm text-white',
+                cart.totalQuantity > 0 || 'hidden',
+              )}
+            >
+              {cart.totalQuantity || 0}
+            </div>
+          ) : null}
         </div>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Cart</SheetTitle>
           <SheetDescription>
-            {cart.totalQuantity > 0
+            {cart && cart.totalQuantity > 0
               ? 'Order Summary'
               : `Looks like you haven't added anything yet, let's get you started!`}
           </SheetDescription>
         </SheetHeader>
-        {cart.totalQuantity > 0 ? (
+        {cart && cart.totalQuantity > 0 ? (
           <CartDetails cart={cart} />
         ) : (
           <SheetClose asChild>
