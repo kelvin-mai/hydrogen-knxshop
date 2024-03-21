@@ -4,7 +4,7 @@ import { Image } from '@shopify/hydrogen';
 
 import { ARTICLE_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
-import { RawHtml } from '~/components/common';
+import { PageLayout, RawHtml } from '~/components/common';
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { blogHandle, articleHandle } = params;
@@ -42,15 +42,12 @@ export default function Article() {
   }).format(new Date(article.publishedAt));
 
   return (
-    <div>
-      <h1 className='py-4 text-3xl font-bold'>
-        {title}
-        <span>
-          {publishedDate} &middot; {author?.name}
-        </span>
-      </h1>
+    <PageLayout
+      title={title}
+      description={`${publishedDate} · ${author?.name}`}
+    >
       {image && <Image data={image} sizes='90vw' loading='eager' />}
       <RawHtml html={contentHtml} />
-    </div>
+    </PageLayout>
   );
 }

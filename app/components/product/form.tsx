@@ -6,7 +6,7 @@ import {
   ProductVariantFragment,
 } from 'storefrontapi.generated';
 import { cn } from '~/lib/classname';
-import { Button } from '~/components/ui';
+import { AddToCart } from './add-to-cart';
 
 type ProductFormProps = {
   product: ProductFragment;
@@ -64,26 +64,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         action={CartForm.ACTIONS.LinesAdd}
       >
         {(fetcher: FetcherWithComponents<any>) => (
-          <>
-            <input
-              name='analytics'
-              type='hidden'
-              value={JSON.stringify(analytics)}
-            />
-            <Button
-              className='text-md w-full'
-              onClick={() => {}}
-              disabled={
-                !product.selectedVariant ||
-                !product.selectedVariant.availableForSale ||
-                fetcher.state !== 'idle'
-              }
-            >
-              {product.selectedVariant?.availableForSale
-                ? 'Add to cart'
-                : 'Sold out'}
-            </Button>
-          </>
+          <AddToCart
+            product={product}
+            analytics={analytics}
+            fetcher={fetcher}
+          />
         )}
       </CartForm>
       {product.selectedVariant?.availableForSale && storeDomain && (

@@ -28,7 +28,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({ searchTerm }) => {
   }, []);
 
   return (
-    <Form action='/search' method='get' className='flex gap-4'>
+    <Form action='/search' method='get' className='mb-4 flex gap-4'>
       <Input
         defaultValue={searchTerm}
         name='q'

@@ -23,6 +23,7 @@ import { HEADER_QUERY, FOOTER_QUERY } from '~/graphql/storefront';
 import tailwindCss from './styles/tailwind.css';
 import { faviconLinks } from './lib/favicon';
 import { Layout } from '~/components/layout';
+import { Providers } from './context/providers';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -110,7 +111,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
 export default function App() {
   const nonce = useNonce();
   const data = useLoaderData<typeof loader>();
-  // console.log('root data', data);
 
   return (
     <html lang='en'>
@@ -121,9 +121,11 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Layout {...data}>
-          <Outlet />
-        </Layout>
+        <Providers>
+          <Layout {...data}>
+            <Outlet />
+          </Layout>
+        </Providers>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />
