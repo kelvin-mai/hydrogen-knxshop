@@ -5,6 +5,7 @@ import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
 import { BLOG_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
 import { ArticleItem } from '~/components/blog/article-item';
+import { PageLayout, PaginationContainer } from '~/components/common';
 
 export const loader = async ({
   request,
@@ -43,33 +44,32 @@ export default function Blog() {
   const { articles } = blog;
 
   return (
-    <div className='blog'>
-      <h1>{blog.title}</h1>
-      <div className='blog-grid'>
-        <Pagination connection={articles}>
-          {({ nodes, isLoading, PreviousLink, NextLink }) => {
-            return (
-              <>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-                {nodes.map((article, index) => {
-                  return (
-                    <ArticleItem
-                      article={article}
-                      key={article.id}
-                      loading={index < 2 ? 'eager' : 'lazy'}
-                    />
-                  );
-                })}
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </>
-            );
-          }}
-        </Pagination>
-      </div>
-    </div>
+    <PageLayout title={blog.title}>
+      <Pagination connection={articles}>
+        {({ nodes, isLoading, PreviousLink, NextLink }) => (
+          <PaginationContainer
+            isLoading={isLoading}
+            PreviousLink={PreviousLink}
+            NextLink={NextLink}
+          >
+            <PreviousLink>
+              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+            </PreviousLink>
+            {nodes.map((article, index) => {
+              return (
+                <ArticleItem
+                  article={article}
+                  key={article.id}
+                  loading={index < 2 ? 'eager' : 'lazy'}
+                />
+              );
+            })}
+            <NextLink>
+              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+            </NextLink>
+          </PaginationContainer>
+        )}
+      </Pagination>
+    </PageLayout>
   );
 }

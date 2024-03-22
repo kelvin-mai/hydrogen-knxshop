@@ -12,7 +12,7 @@ import { ProductGrid } from '~/components/product/grid';
 
 import { COLLECTION_DETAILS_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
-import { PageLayout } from '~/components/common';
+import { PageLayout, PaginationContainer } from '~/components/common';
 
 export const loader = async ({
   params: { handle },
@@ -54,15 +54,13 @@ export default function Collection() {
     <PageLayout title={collection.title} description={collection.description}>
       <Pagination connection={collection.products}>
         {({ nodes, isLoading, PreviousLink, NextLink }) => (
-          <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>Load previous</span>}
-            </PreviousLink>
+          <PaginationContainer
+            isLoading={isLoading}
+            PreviousLink={PreviousLink}
+            NextLink={NextLink}
+          >
             <ProductGrid products={nodes} />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more</span>}
-            </NextLink>
-          </>
+          </PaginationContainer>
         )}
       </Pagination>
     </PageLayout>

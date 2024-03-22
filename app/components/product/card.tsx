@@ -33,18 +33,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <h3 className='w-full max-w-prose overflow-hidden text-ellipsis whitespace-nowrap font-semibold'>
             {product.title}
           </h3>
-          <p>
-            <span className='inherit text-copy flex max-w-prose gap-4 whitespace-pre-wrap'>
-              <Money withoutTrailingZeros data={price} />
-              {isDiscounted && (
-                <Money
-                  className='line-through opacity-50'
-                  withoutTrailingZeros
-                  data={compareAtPrice}
-                />
-              )}
-            </span>
-          </p>
+          <div className='inherit text-copy flex max-w-prose gap-4 whitespace-pre-wrap'>
+            <Money withoutTrailingZeros data={price} />
+            {isDiscounted && (
+              <Money
+                className='line-through opacity-50'
+                withoutTrailingZeros
+                data={compareAtPrice}
+              />
+            )}
+          </div>
         </div>
       </div>
     </Link>

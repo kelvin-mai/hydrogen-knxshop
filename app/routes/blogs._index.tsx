@@ -4,6 +4,7 @@ import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
 
 import { BLOGS_QUERY } from '~/graphql/storefront';
 import { createMeta } from '~/lib/meta';
+import { PageLayout, PaginationContainer } from '~/components/common';
 
 export const loader = async ({
   request,
@@ -28,36 +29,29 @@ export default function Blogs() {
   const { blogs } = useLoaderData<typeof loader>();
 
   return (
-    <div className='blogs'>
-      <h1>Blogs</h1>
-      <div className='blogs-grid'>
-        <Pagination connection={blogs}>
-          {({ nodes, isLoading, PreviousLink, NextLink }) => {
-            return (
-              <>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-                {nodes.map((blog) => {
-                  return (
-                    <Link
-                      className='blog'
-                      key={blog.handle}
-                      prefetch='intent'
-                      to={`/blogs/${blog.handle}`}
-                    >
-                      <h2>{blog.title}</h2>
-                    </Link>
-                  );
-                })}
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </>
-            );
-          }}
-        </Pagination>
-      </div>
-    </div>
+    <PageLayout title='Blogs'>
+      <Pagination connection={blogs}>
+        {({ nodes, isLoading, PreviousLink, NextLink }) => (
+          <PaginationContainer
+            isLoading={isLoading}
+            PreviousLink={PreviousLink}
+            NextLink={NextLink}
+          >
+            {nodes.map((blog) => {
+              return (
+                <Link
+                  className='blog'
+                  key={blog.handle}
+                  prefetch='intent'
+                  to={`/blogs/${blog.handle}`}
+                >
+                  <h2>{blog.title}</h2>
+                </Link>
+              );
+            })}
+          </PaginationContainer>
+        )}
+      </Pagination>
+    </PageLayout>
   );
 }

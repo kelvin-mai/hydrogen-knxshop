@@ -4,6 +4,7 @@ import { Image, Pagination } from '@shopify/hydrogen';
 
 import { SearchQuery } from 'storefrontapi.generated';
 import { applyTrackingParams } from '~/lib/search';
+import { PaginationContainer } from '~/components/common';
 
 type SearchResultsProps = {
   results: SearchQuery | null;
@@ -17,8 +18,6 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   if (!results) {
     return null;
   }
-  console.log(results);
-  const keys = Object.keys(results) as Array<keyof typeof results>;
   return (
     <div className='grid grid-cols-[1fr_2fr]'>
       <div>
@@ -44,10 +43,11 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         <h2>Products</h2>
         <Pagination connection={results.products}>
           {({ nodes, isLoading, NextLink, PreviousLink }) => (
-            <>
-              <PreviousLink>
-                {isLoading ? 'loading' : <span>Load Previous</span>}
-              </PreviousLink>
+            <PaginationContainer
+              isLoading={isLoading}
+              NextLink={NextLink}
+              PreviousLink={PreviousLink}
+            >
               {nodes.map((product) => {
                 const trackingParams = applyTrackingParams(
                   product,
@@ -77,10 +77,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   </div>
                 );
               })}
-              <NextLink>
-                {isLoading ? 'loading...' : <span>Load next</span>}
-              </NextLink>
-            </>
+            </PaginationContainer>
           )}
         </Pagination>
       </div>

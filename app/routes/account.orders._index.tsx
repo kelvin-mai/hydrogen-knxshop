@@ -5,14 +5,15 @@ import {
   getPaginationVariables,
   flattenConnection,
 } from '@shopify/hydrogen';
-import { json, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+
 import type {
   CustomerOrdersFragment,
   OrderItemFragment,
 } from 'customer-accountapi.generated';
-
 import { CUSTOMER_ORDERS_QUERY } from '~/graphql/customer-account';
 import { createMeta } from '~/lib/meta';
+import { PaginationContainer } from '~/components/common';
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
@@ -59,21 +60,17 @@ function OrdersTable({ orders }: Pick<CustomerOrdersFragment, 'orders'>) {
     <div className='acccount-orders'>
       {orders?.nodes.length ? (
         <Pagination connection={orders}>
-          {({ nodes, isLoading, PreviousLink, NextLink }) => {
-            return (
-              <>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-                {nodes.map((order) => {
-                  return <OrderItem key={order.id} order={order} />;
-                })}
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </>
-            );
-          }}
+          {({ nodes, isLoading, PreviousLink, NextLink }) => (
+            <PaginationContainer
+              isLoading={isLoading}
+              PreviousLink={PreviousLink}
+              NextLink={NextLink}
+            >
+              {nodes.map((order) => {
+                return <OrderItem key={order.id} order={order} />;
+              })}
+            </PaginationContainer>
+          )}
         </Pagination>
       ) : (
         <EmptyOrders />
